@@ -1,0 +1,1 @@
+# terraform-azuread-recommended-conditional-access-policies
