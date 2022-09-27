@@ -1,5 +1,5 @@
 # Introduction
-Based on the great work of [Kenneth van Surksum and his conditional access demystification whitepaper](https://www.vansurksum.com/2021/10/14/october-2021-update-of-the-conditional-access-demystified-whitepaper-and-workflow-cheat-sheet/), where he has created a spreadsheet with recommended default set of conditional access policies, this Terraform module creates the recommended policies - with some small changes and additions. This version is based on [version 1.3 of his recommended policies](https://github.com/kennethvs/blog/blob/master/Conditional%20Access%20Policy%20Description-v1.3.xlsx).
+Based on the great work of Kenneth van Surksum and his [conditional access demystification whitepaper](https://www.vansurksum.com/2021/10/14/october-2021-update-of-the-conditional-access-demystified-whitepaper-and-workflow-cheat-sheet/), where he has created a spreadsheet with a recommended set of conditional access policies, this Terraform module creates these policies - with some small changes and additions. This version is based on [version 1.3 of his recommended policies](https://github.com/kennethvs/blog/blob/master/Conditional%20Access%20Policy%20Description-v1.3.xlsx).
 
 Thanks for your contribution to the community, Kenneth!
 
