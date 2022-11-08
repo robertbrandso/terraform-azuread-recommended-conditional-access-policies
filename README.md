@@ -3,6 +3,9 @@ Based on the great work of Kenneth van Surksum and his [conditional access demys
 
 Thanks for your contribution to the community, Kenneth!
 
+# Terraform Registry
+You can also find the module on Terraform Registry: [https://registry.terraform.io/modules/robertbrandso/recommended-conditional-access-policies/azuread/latest](https://registry.terraform.io/modules/robertbrandso/recommended-conditional-access-policies/azuread/latest)
+
 # API permissions needed
 When running this as with a service principal the following API permissions are needed:
 | **API permission**                   | **Description**                                                                |
