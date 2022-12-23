@@ -1,20 +1,20 @@
 # Introduction
-Based on the great work of Kenneth van Surksum and his [conditional access demystification whitepaper](https://www.vansurksum.com/2021/10/14/october-2021-update-of-the-conditional-access-demystified-whitepaper-and-workflow-cheat-sheet/), where he has created a spreadsheet with a recommended set of conditional access policies, this Terraform module creates these policies - with some small changes and additions. This version is based on [version 1.3 of his recommended policies](https://github.com/kennethvs/blog/blob/master/Conditional%20Access%20Policy%20Description-v1.3.xlsx).
+Based on the great work of Kenneth van Surksum and his [conditional access demystification whitepaper](https://www.vansurksum.com/2022/12/15/december-2022-update-of-the-conditional-access-demystified-whitepaper-and-workflow-cheat-sheet/), where he has created a spreadsheet with a recommended set of conditional access policies, this Terraform module creates these policies - with some small changes and additions. This version is based on [version 1.4 of his recommended policies](https://github.com/kennethvs/cabaseline202212/blob/main/Conditional%20Access%20Policy%20Description-v1.4.xlsx).
 
 Thanks for your contribution to the community, Kenneth!
 
 # Terraform Registry
-You can also find the module on Terraform Registry: [https://registry.terraform.io/modules/robertbrandso/recommended-conditional-access-policies/azuread/latest](https://registry.terraform.io/modules/robertbrandso/recommended-conditional-access-policies/azuread/latest)
+You can find this module on Terraform Registry: [https://registry.terraform.io/modules/robertbrandso/recommended-conditional-access-policies](https://registry.terraform.io/modules/robertbrandso/recommended-conditional-access-policies)
 
 # API permissions needed
 When running this as with a service principal the following API permissions are needed:
-| **API permission**                   | **Description**                                                                |
-| ------------------------------------ | ------------------------------------------------------------------------------ |
-| `Policy.ReadWrite.ConditionalAccess` | Needed to read and create the conditional access policies.                     |
-| `Policy.Read.All`                    | Needed to read and create the conditional access policies.                     |
-| `Group.ReadWrite.All`                | Needed to create the Azure AD groups used for exclusion.                       |
-| `User.Read.All`                      | Needed to get information about object ID of user accounts when providing UPN. |
-| `Application.Read.All`               | Needed to include applications in ceartain policies.                           |
+| **API permission** | **Description** |
+| ------------------ | --------------- |
+| `Policy.ReadWrite.ConditionalAccess` | Needed to read and create the conditional access policies. |
+| `Policy.Read.All` | Needed to read and create the conditional access policies. |
+| `Group.ReadWrite.All` | Needed to create the Azure AD groups used for exclusion. |
+| `User.Read.All` | Needed to get information about object ID of user accounts when providing UPN. |
+| `Application.Read.All` | Needed to include applications in certain policies. |
 
 # Policies
 The following policies can be created through this module:
@@ -56,19 +56,19 @@ The following changes are done compared to the recommended policies mentioned in
 | Policy | Description |
 | ------ | ----------- |
 | CAU002 | Excluded the `Directory Synchronization Accounts` role. |
+| CAU002 | Version 1.1 of the policy in the Excel sheet uses _Require authentication strength_. This is not supported in Terraform resource `azuread_conditional_access_policy` ([GitHub issue](https://github.com/hashicorp/terraform-provider-azuread/issues/944)). CAU009 created using regular "require MFA" like in version 1.0 of the policy. |
 | CAU006 | Fixed name of the policy, so it follows the naming standard. |
 | CAU007 | Fixed name of the policy, so it follows the naming standard. |
 | CAU007 | Changed `client_app_types` to `all`. `passwordChange` requires all client app types. |
-| CAU008 | Azure AD roles have old names in Excel sheet. |
 | CAU008 | Added more AAD roles to the list included_roles. |
-| CAU010 | Added v1.0 at the end of the name. |
-| CAU012 | Policy not created because authentication context is not supported in Terraform resource `azuread_conditional_access_policy` ([GitHub issue](https://github.com/hashicorp/terraform-provider-azuread/issues/882)) |
-| CAU013 | Policy not created because authentication context is not supported in Terraform resource `azuread_conditional_access_policy` ([GitHub issue](https://github.com/hashicorp/terraform-provider-azuread/issues/882)) |
-| CAD006 | Fixed name of the policy, so it follows the naming standard. |
+| CAU008 | Version 1.1 of the policy in the Excel sheet uses _Require authentication strength_. This is not supported in Terraform resource `azuread_conditional_access_policy` ([GitHub issue](https://github.com/hashicorp/terraform-provider-azuread/issues/944)). CAU008 created using regular "require MFA" like in version 1.0 of the policy. |
+| CAU009 | Version 1.1 of the policy in the Excel sheet uses _Require authentication strength_. This is not supported in Terraform resource `azuread_conditional_access_policy` ([GitHub issue](https://github.com/hashicorp/terraform-provider-azuread/issues/944)). CAU009 created using regular "require MFA" like in version 1.0 of the policy. |
+| CAU010 | Remains on version 1.0 of the policy. Unsure about version 1.1 in the Excel sheet, since it states that Intune and Intune enrollment should be excluded. Unsure why, and I have no application id that match these choices. These does not exist in the [exported version of Kenneths policy](https://github.com/kennethvs/cabaseline202212/blob/main/ConditionalAccess/CAU010-All%20Grant%20Require%20ToU%20for%20All%20Users%20when%20Browser%20and%20Modern%20Auth%20Clients-v1.1.json) either. |
+| CAU012 | Policy not created because CAL002 is the same. |
+| CAD004 | Version 1.3 of the policy in the Excel sheet uses _Require authentication strength_. This is not supported in Terraform resource `azuread_conditional_access_policy` ([GitHub issue](https://github.com/hashicorp/terraform-provider-azuread/issues/944)). CAD004 created using regular "require MFA" like in version 1.2 of the policy. |
 | CAD010 | `client_app_types` needs to bet set to `all` when `included_user_actions = ["urn:user:registerdevice"]` is set. |
-| CAD010 | Fixed name of the policy, so it follows the naming standard. |
-| CAL003 | Extra policy added. Does not exist in Kenneths recommended policies. |
-| CAL004 | Extra policy added. Does not exist in Kenneths recommended policies. |
+| CAD012 | Added more AAD roles to the list included_roles. |
+| CAL004 | Added more AAD roles to the list included_roles. |
 
 # Common configuration
 
@@ -93,7 +93,7 @@ The following privileged roles are set as default in the module:
 * Exchange Administrator
 * Conditional Access Administrator
 * Billing Administrator
-* Authentication Administrato   
+* Authentication Administrator
 * Authentication Policy Administrator
 * Azure DevOps Administrator
 * Azure Information Protection Administrator
@@ -142,8 +142,8 @@ provider "azuread" {}
 # -----------------------------------
 
 module "default_conditional_access_policies" {
-  source  = "..."
-  version = "..."
+  source  = "robertbrandso/recommended-conditional-access-policies/azuread"
+  version = "1.4.0"
 
   group_name_prefix          = "Access-Contoso"
   emergency_access_upn       = "emergency-access-caa@contoso.onmicrosoft.com"
@@ -174,14 +174,18 @@ resource "azuread_named_location" "norway" {
 # -----------------------------------
 
 module "default_conditional_access_policies" {
-  source  = "..."
-  version = "..."
+  source  = "robertbrandso/recommended-conditional-access-policies/azuread"
+  version = "1.4.0"
 
   # Common configuration
   group_name_prefix               = "Access-Contoso"
   emergency_access_upn            = "emergency-access-caa@contoso.onmicrosoft.com"
   supported_device_platforms      = ["android", "iOS", "linux", "macOS", "windows"]
   reporting_only_for_all_policies = true
+  trusted_locations = [
+    "1.2.3.4/32", # Oslo office
+    "4.3.2.1/32"  # Stockholm office
+  ]
 
   # Custom settings for user policies
   cau004_included_application_ids = ["eafb53d0-2c31-45ca-91ed-0a262e9e64ec"] # Contoso ERP app

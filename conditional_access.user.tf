@@ -53,7 +53,7 @@ resource "azuread_group" "cau002_exclude" {
 resource "azuread_conditional_access_policy" "cau002" {
   count = var.cau002_create == true ? 1 : 0
 
-  display_name = "CAU002-All: Grant Require MFA for All users when Browser and Modern Auth Clients-v1.1"
+  display_name = "CAU002-All: Grant Require MFA for All users when Browser and Modern Auth Clients-v1.0"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cau002_state
 
   conditions {
@@ -124,7 +124,7 @@ resource "azuread_group" "cau004_exclude" {
 resource "azuread_conditional_access_policy" "cau004" {
   count = var.cau004_create == true && var.cau004_included_application_ids != null ? 1 : 0 # Policy can't be created if no application ids in var.cau004_included_application_ids are defined.
 
-  display_name = "CAU004-Selected: Session route through MCAS for All users when Browser on Non-Compliant-v1.1"
+  display_name = "CAU004-Selected: Session route through MDCA for All users when Browser on Non-Compliant-v1.2"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cau004_state
 
   conditions {
@@ -140,7 +140,7 @@ resource "azuread_conditional_access_policy" "cau004" {
     devices {
       filter {
         mode = "exclude"
-        rule = "device.isCompliant -eq True" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
+        rule = "device.isCompliant -eq True -or device.trustType -eq \"ServerAD\"" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
       }
     }
   }
@@ -175,7 +175,7 @@ resource "azuread_group" "cau005_exclude" {
 resource "azuread_conditional_access_policy" "cau005" {
   count = var.cau005_create == true && var.cau005_included_application_ids != null ? 1 : 0 # Policy can't be created if no application ids in var.cau005_included_application_ids are defined.
 
-  display_name = "CAU005-Selected: Session route through MCAS for All users when Browser on Compliant-v1.1"
+  display_name = "CAU005-Selected: Session route through MDCA for All users when Browser on Compliant-v1.1"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cau005_state
 
   conditions {
@@ -191,7 +191,7 @@ resource "azuread_conditional_access_policy" "cau005" {
     devices {
       filter {
         mode = "include"
-        rule = "device.isCompliant -eq True" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
+        rule = "device.isCompliant -eq True -or device.trustType -eq \"ServerAD\"" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
       }
     }
   }
@@ -419,9 +419,5 @@ resource "azuread_conditional_access_policy" "cau011" {
   }
 }
 
-## CAU012 (optional)
-/* Authentication context not supported in azuread_conditional_access_policy */
-
-
-## CAU013 (optional)
-/* Authentication context not supported in azuread_conditional_access_policy */
+## CAU012
+/* Policy will not be created. Same as CAL002. */

@@ -18,7 +18,7 @@ resource "azuread_group" "cad001_exclude" {
 resource "azuread_conditional_access_policy" "cad001" {
   count = var.cad001_create == true ? 1 : 0
 
-  display_name = "CAD001-O365: Grant macOS access for All users when Modern Auth Clients and Compliant-v1.0"
+  display_name = "CAD001-O365: Grant macOS access for All users when Modern Auth Clients and Compliant-v1.1"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad001_state
 
   conditions {
@@ -56,7 +56,7 @@ resource "azuread_group" "cad002_exclude" {
 resource "azuread_conditional_access_policy" "cad002" {
   count = var.cad002_create == true ? 1 : 0
 
-  display_name = "CAD002-O365: Grant Windows access for All users when Modern Auth Clients and Compliant-v1.0"
+  display_name = "CAD002-O365: Grant Windows access for All users when Modern Auth Clients and Compliant-v1.1"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad002_state
 
   conditions {
@@ -75,7 +75,7 @@ resource "azuread_conditional_access_policy" "cad002" {
   }
 
   grant_controls {
-    built_in_controls = ["compliantDevice"]
+    built_in_controls = ["compliantDevice", "domainJoinedDevice"]
     operator          = "OR"
   }
 }
@@ -94,7 +94,7 @@ resource "azuread_group" "cad003_exclude" {
 resource "azuread_conditional_access_policy" "cad003" {
   count = var.cad003_create == true ? 1 : 0
 
-  display_name = "CAD003-O365: Grant iOS and Android access for All users when Modern Auth Clients and ApprovedApp or Compliant-v1.0"
+  display_name = "CAD003-O365: Grant iOS and Android access for All users when Modern Auth Clients and ApprovedApp or Compliant-v1.1"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad003_state
 
   conditions {
@@ -132,7 +132,7 @@ resource "azuread_group" "cad004_exclude" {
 resource "azuread_conditional_access_policy" "cad004" {
   count = var.cad004_create == true ? 1 : 0
 
-  display_name = "CAD004-O365: Grant Require MFA for All users when Browser and Non-Compliant-v1.1"
+  display_name = "CAD004-O365: Grant Require MFA for All users when Browser and Non-Compliant-v1.2"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad004_state
 
   conditions {
@@ -148,7 +148,7 @@ resource "azuread_conditional_access_policy" "cad004" {
     devices {
       filter {
         mode = "exclude"
-        rule = "device.isCompliant -eq True" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
+        rule = "device.isCompliant -eq True -or device.trustType -eq \"ServerAD\"" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
       }
     }
   }
@@ -173,7 +173,7 @@ resource "azuread_group" "cad005_exclude" {
 resource "azuread_conditional_access_policy" "cad005" {
   count = var.cad005_create == true ? 1 : 0
 
-  display_name = var.cad005_enable_for_browser == true ? "CAD005-O365: Block access for unsupported device platforms for All users when Modern Auth Clients and Browser-v1.0" : "CAD005-O365: Block access for unsupported device platforms for All users when Modern Auth Clients-v1.0"
+  display_name = var.cad005_enable_for_browser == true ? "CAD005-O365: Block access for unsupported device platforms for All users when Modern Auth Clients and Browser-v1.1" : "CAD005-O365: Block access for unsupported device platforms for All users when Modern Auth Clients-v1.1"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad005_state
 
   conditions {
@@ -213,7 +213,7 @@ resource "azuread_group" "cad006_exclude" {
 resource "azuread_conditional_access_policy" "cad006" {
   count = var.cad006_create == true ? 1 : 0
 
-  display_name = "CAD006-O365: Session Use app enforced restrictions on unmanaged device when All users when Browser-v1.1"
+  display_name = "CAD006-O365: Session block download on unmanaged device for All users when Browser and Modern App Clients and Non-Compliant-v1.6"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad006_state
 
   conditions {
@@ -225,11 +225,11 @@ resource "azuread_conditional_access_policy" "cad006" {
     applications {
       included_applications = ["Office365"]
     }
-    client_app_types = ["browser"]
+    client_app_types = ["mobileAppsAndDesktopClients", "browser"]
     devices {
       filter {
         mode = "exclude"
-        rule = "device.isCompliant -eq True" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
+        rule = "device.isCompliant -eq True -or device.trustType -eq \"ServerAD\"" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
       }
     }
   }
@@ -264,7 +264,7 @@ resource "azuread_group" "cad007_exclude" {
 resource "azuread_conditional_access_policy" "cad007" {
   count = var.cad007_create == true ? 1 : 0
 
-  display_name = "CAD007-O365: Session set Sign-in Frequency for Apps for All users when Modern Auth Clients and Non-Compliant-v1.0"
+  display_name = "CAD007-O365: Session set Sign-in Frequency for Apps for All users when Modern Auth Clients and Non-Compliant-v1.3"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad007_state
 
   conditions {
@@ -283,7 +283,7 @@ resource "azuread_conditional_access_policy" "cad007" {
     devices {
       filter {
         mode = "exclude"
-        rule = "device.isCompliant -eq True" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
+        rule = "device.isCompliant -eq True -or device.trustType -eq \"ServerAD\"" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
       }
     }
   }
@@ -371,7 +371,7 @@ resource "azuread_group" "cad009_exclude" {
 resource "azuread_conditional_access_policy" "cad009" {
   count = var.cad009_create == true ? 1 : 0
 
-  display_name = "CAD009-All: Session disable browser persistence for All users when Browser and Non-Compliant-v1.1"
+  display_name = "CAD009-All: Session disable browser persistence for All users when Browser and Non-Compliant-v1.3"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad009_state
 
   conditions {
@@ -387,7 +387,7 @@ resource "azuread_conditional_access_policy" "cad009" {
     devices {
       filter {
         mode = "exclude"
-        rule = "device.isCompliant -eq True" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
+        rule = "device.isCompliant -eq True -or device.trustType -eq \"ServerAD\"" # https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/concept-condition-filters-for-devices#supported-operators-and-device-properties-for-filters
       }
     }
   }
@@ -422,7 +422,7 @@ resource "azuread_group" "cad010_exclude" {
 resource "azuread_conditional_access_policy" "cad010" {
   count = var.cad010_create == true ? 1 : 0
 
-  display_name = "CAD010-All: Require MFA for device join or registration when All clients-v1.0"
+  display_name = "CAD010-RJD: Require MFA for device join or registration when Browser and Modern Auth Clients-v1.1"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad010_state
 
   conditions {
@@ -439,6 +439,114 @@ resource "azuread_conditional_access_policy" "cad010" {
 
   grant_controls {
     built_in_controls = ["mfa"]
+    operator          = "OR"
+  }
+}
+
+## CAD011
+### Create exclude group
+resource "azuread_group" "cad011_exclude" {
+  count = var.cad011_create == true ? 1 : 0
+
+  display_name            = "${var.group_name_prefix}-CA-Exclude-CAD011"
+  security_enabled        = true
+  prevent_duplicate_names = true
+}
+
+### Create policy
+resource "azuread_conditional_access_policy" "cad011" {
+  count = var.cad011_create == true ? 1 : 0
+
+  display_name = "CAD011-O365: Grant Linux access for All users when Modern Auth Clients and Compliant-v1.0"
+  state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad011_state
+
+  conditions {
+    users {
+      included_users  = ["All"]
+      excluded_groups = [azuread_group.cad011_exclude[0].object_id]
+      excluded_users  = concat(var.emergency_access_upn != null ? [data.azuread_user.emergency_access_upn[0].object_id] : [], ["GuestsOrExternalUsers"])
+    }
+    applications {
+      included_applications = ["Office365"]
+    }
+    client_app_types = ["mobileAppsAndDesktopClients"]
+    platforms {
+      included_platforms = ["linux"]
+    }
+  }
+
+  grant_controls {
+    built_in_controls = ["compliantDevice"]
+    operator          = "OR"
+  }
+}
+
+## CAD012
+### Create exclude group
+resource "azuread_group" "cad012_exclude" {
+  count = var.cad012_create == true ? 1 : 0
+
+  display_name            = "${var.group_name_prefix}-CA-Exclude-CAD012"
+  security_enabled        = true
+  prevent_duplicate_names = true
+}
+
+### Create policy
+resource "azuread_conditional_access_policy" "cad012" {
+  count = var.cad012_create == true ? 1 : 0
+
+  display_name = "CAD012-All: Grant access for Admin users when Browser and Modern Auth Clients and Compliant-v1.0"
+  state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad012_state
+
+  conditions {
+    users {
+      included_roles  = var.privileged_role_ids
+      excluded_groups = [azuread_group.cad012_exclude[0].object_id]
+      excluded_users  = var.emergency_access_upn != null ? [data.azuread_user.emergency_access_upn[0].object_id] : null
+    }
+    applications {
+      included_applications = ["All"]
+    }
+    client_app_types = ["browser", "mobileAppsAndDesktopClients"]
+  }
+
+  grant_controls {
+    built_in_controls = ["compliantDevice", "domainJoinedDevice"]
+    operator          = "OR"
+  }
+}
+
+## CAD013
+### Create exclude group
+resource "azuread_group" "cad013_exclude" {
+  count = var.cad013_create == true && var.cad013_included_application_ids != null ? 1 : 0 # Policy can't be created if no application ids in var.cad013_included_application_ids are defined, therefore no group needed either.
+
+  display_name            = "${var.group_name_prefix}-CA-Exclude-CAD013"
+  security_enabled        = true
+  prevent_duplicate_names = true
+}
+
+### Create policy
+resource "azuread_conditional_access_policy" "cad013" {
+  count = var.cad013_create == true && var.cad013_included_application_ids != null ? 1 : 0 # Policy can't be created if no application ids in var.cad013_included_application_ids are defined.
+
+  display_name = "CAD013-Selected: Grant access for All users when Browser and Modern Auth Clients and Compliant-v1.0"
+  state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cad013_state
+
+  conditions {
+    users {
+      included_users  = ["All"]
+      excluded_groups = [azuread_group.cad013_exclude[0].object_id]
+      excluded_users  = var.emergency_access_upn != null ? [data.azuread_user.emergency_access_upn[0].object_id] : null
+    }
+    applications {
+      included_applications = var.cad013_included_application_ids
+    }
+    client_app_types = ["browser", "mobileAppsAndDesktopClients"]
+  }
+
+  grant_controls {
+    built_in_controls = ["compliantDevice", "domainJoinedDevice"]
     operator          = "OR"
   }
 }

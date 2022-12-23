@@ -427,6 +427,54 @@ variable "cad010_state" {
   default     = "enabled"
 }
 
+## CAD011
+variable "cad011_create" {
+  description = "(Optional) Defaults to 'true'. Set to false if you don't want to create the policy."
+  type        = bool
+  default     = true
+}
+
+variable "cad011_state" {
+  description = "(Optional) Defaults to 'enabled'. Possible values are: 'enabled', 'disabled' and 'enabledForReportingButNotEnforced'."
+  type        = string
+  default     = "enabled"
+}
+
+## CAD012
+variable "cad012_create" {
+  description = "(Optional) Defaults to 'true'. Set to false if you don't want to create the policy."
+  type        = bool
+  default     = true
+}
+
+variable "cad012_state" {
+  description = "(Optional) Defaults to 'enabled'. Possible values are: 'enabled', 'disabled' and 'enabledForReportingButNotEnforced'."
+  type        = string
+  default     = "enabled"
+}
+
+## CAD013
+variable "cad013_create" {
+  description = "(Optional) Defaults to 'true'. Set to false if you don't want to create the policy."
+  type        = bool
+  default     = true
+}
+
+variable "cad013_state" {
+  description = "(Optional) Defaults to 'enabled'. Possible values are: 'enabled', 'disabled' and 'enabledForReportingButNotEnforced'."
+  type        = string
+  default     = "enabled"
+}
+
+variable "cad013_included_application_ids" {
+  description = "(Optional) A list of application IDs the policy applies to."
+  type        = list(string)
+  default     = null
+}
+
+
+# Category: Location
+
 ## CAL001
 variable "cal001_create" {
   description = "(Optional) Defaults to 'true'. Set to false if you don't want to create the policy."
@@ -472,6 +520,12 @@ variable "cal003_state" {
   default     = "enabled"
 }
 
+variable "cal003_included_user_upns" {
+  description = "(Optional) List of UPNs to include in CAL003 to only accept logins from trusted locations."
+  type        = list(string)
+  default     = null
+}
+
 ## CAL004
 variable "cal004_create" {
   description = "(Optional) Defaults to 'true'. Set to false if you don't want to create the policy."
@@ -485,8 +539,21 @@ variable "cal004_state" {
   default     = "enabled"
 }
 
-variable "cal004_included_user_upns" {
-  description = "(Optional) List of UPNs to include in CAL004 to only accept logins from trusted locations."
+## CAL005
+variable "cal005_create" {
+  description = "(Optional) Defaults to 'true'. Set to false if you don't want to create the policy."
+  type        = bool
+  default     = true
+}
+
+variable "cal005_state" {
+  description = "(Optional) Defaults to 'enabled'. Possible values are: 'enabled', 'disabled' and 'enabledForReportingButNotEnforced'."
+  type        = string
+  default     = "enabled"
+}
+
+variable "cal005_less_trusted_location_ids" {
+  description = "(Optional) List of less-trusted location IDs."
   type        = list(string)
   default     = null
 }
