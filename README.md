@@ -136,8 +136,8 @@ If your tenant are not using Intune, the service principals for Intune and Intun
 
 If you're missing the service principals for Intune and Intune enrollment, you may add them using the following PowerShell commands:
 
-`New-MgServicePrincipal -AppId 0000000a-0000-0000-c000-000000000000 # Microsoft Intune` 
-`New-MgServicePrincipal -AppId d4ebce55-015a-49b5-a083-c84d1797ae8c # Microsoft Intune Enrollment`
+* `New-MgServicePrincipal -AppId 0000000a-0000-0000-c000-000000000000 # Microsoft Intune`
+* `New-MgServicePrincipal -AppId d4ebce55-015a-49b5-a083-c84d1797ae8c # Microsoft Intune Enrollment`
 
 # Example
 
