@@ -180,7 +180,7 @@ resource "azuread_group" "cal005_exclude" {
 resource "azuread_conditional_access_policy" "cal005" {
   count = var.cal005_create == true && var.cal005_less_trusted_location_ids != null ? 1 : 0 # Policy can't be created if no trusted location are defined in var.cal005_less_trusted_location_ids.
 
-  display_name = "CAL005-Selected: Grant access for All users on less-trusted locations when Browser and Modern Auth Clients and Compliant - v1.0"
+  display_name = "CAL005-Selected: Grant access for All users on less-trusted locations when Browser and Modern Auth Clients and Compliant-v1.0"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cal005_state
 
   conditions {
@@ -191,6 +191,7 @@ resource "azuread_conditional_access_policy" "cal005" {
     }
     applications {
       included_applications = ["All"]
+      excluded_applications = ["Office365"]
     }
     client_app_types = ["browser", "mobileAppsAndDesktopClients"]
     locations {
@@ -199,7 +200,11 @@ resource "azuread_conditional_access_policy" "cal005" {
   }
 
   grant_controls {
-    built_in_controls = ["block"]
+    built_in_controls = [
+      "compliantDevice",
+      "domainJoinedDevice",
+      "approvedApplication"
+      ]
     operator          = "OR"
   }
 }

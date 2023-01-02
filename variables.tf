@@ -257,6 +257,12 @@ variable "cau010_terms_of_use_ids" {
   default     = null
 }
 
+variable "cau010_exclude_intune_enrollment" {
+  description = "(Optional) Defaults to 'false'. Set to true to exclude Intune enrollment from policy if you use Autopilot because it is not supported. See https://learn.microsoft.com/en-us/mem/autopilot/known-issues#device-based-conditional-access-policies for details."
+  type        = bool
+  default     = false
+}
+
 ## CAU011
 variable "cau011_create" {
   description = "(Optional) Optional policy. Defaults to 'false'. Set to true if you want to create the policy."

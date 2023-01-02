@@ -362,7 +362,7 @@ resource "azuread_group" "cau010_exclude" {
 resource "azuread_conditional_access_policy" "cau010" {
   count = var.cau010_create == true && var.cau010_terms_of_use_ids != null ? 1 : 0 # Policy can't be created if no terms of use ids in var.cau010_terms_of_use_ids are defined.
 
-  display_name = "CAU010-All: Grant Require ToU for All Users when Browser and Modern Auth Clients-v1.0"
+  display_name = "CAU010-All: Grant Require ToU for All Users when Browser and Modern Auth Clients-v1.1"
   state        = var.reporting_only_for_all_policies == true ? "enabledForReportingButNotEnforced" : var.cau010_state
 
   conditions {
@@ -373,6 +373,10 @@ resource "azuread_conditional_access_policy" "cau010" {
     }
     applications {
       included_applications = ["All"]
+       excluded_applications = var.cau010_exclude_intune_enrollment == true ? [
+         "0000000a-0000-0000-c000-000000000000", # Microsoft Intune
+         "d4ebce55-015a-49b5-a083-c84d1797ae8c"  # Microsoft Intune Enrollment
+         ] : null
     }
     client_app_types = ["browser", "mobileAppsAndDesktopClients"]
   }
