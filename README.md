@@ -60,7 +60,7 @@ The following changes are done compared to the recommended policies mentioned in
 | CAU006 | Fixed name of the policy, so it follows the naming standard. |
 | CAU007 | Fixed name of the policy, so it follows the naming standard. |
 | CAU007 | Changed `client_app_types` to `all`. `passwordChange` requires all client app types. |
-| CAU008 | Added more AAD roles to the list included_roles. |
+| CAU008 | Added more AAD roles to the list `included_roles`. |
 | CAU008 | Version 1.1 of the policy in the Excel sheet uses _Require authentication strength_. This is not supported in Terraform resource `azuread_conditional_access_policy` ([GitHub issue](https://github.com/hashicorp/terraform-provider-azuread/issues/944)). CAU008 created using regular "require MFA" like in version 1.0 of the policy. |
 | CAU009 | Version 1.1 of the policy in the Excel sheet uses _Require authentication strength_. This is not supported in Terraform resource `azuread_conditional_access_policy` ([GitHub issue](https://github.com/hashicorp/terraform-provider-azuread/issues/944)). CAU009 created using regular "require MFA" like in version 1.0 of the policy. |
 | CAU010 | Remains on version 1.0 of the policy. Unsure about version 1.1 in the Excel sheet, since it states that Intune and Intune enrollment should be excluded. Unsure why, and I have no application id that match these choices. These does not exist in the [exported version of Kenneths policy](https://github.com/kennethvs/cabaseline202212/blob/main/ConditionalAccess/CAU010-All%20Grant%20Require%20ToU%20for%20All%20Users%20when%20Browser%20and%20Modern%20Auth%20Clients-v1.1.json) either. |
