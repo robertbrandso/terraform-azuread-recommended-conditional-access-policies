@@ -123,7 +123,7 @@ I haven't found an easy way to find the ID of the terms of use in the Azure Port
 * [Microsoft Graph Docs: Terms of use - List agreements](https://docs.microsoft.com/en-us/graph/api/termsofusecontainer-list-agreements)
 * [Graph Explorer: GET /identityGovernance/termsOfUse/agreements](https://developer.microsoft.com/en-us/graph/graph-explorer?request=identityGovernance%2FtermsOfUse%2Fagreements&method=GET&version=v1.0&GraphUrl=https://graph.microsoft.com)
 
-## Blocked locations
+## Location IDs
 Create blocked locations with the [`azuread_named_location`](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/named_location) resource in your root module, and use the ID in `cal001_blocked_location_ids` and/or `cal005_less_trusted_location_ids`.
 
 ## Organization specific conditional access policies
