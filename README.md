@@ -16,6 +16,17 @@ When running this as with a service principal the following API permissions are 
 | `User.Read.All` | Needed to get information about object ID of user accounts when providing UPN. |
 | `Application.Read.All` | Needed to include applications in certain policies. |
 
+# Common configuration
+
+| **Configuration** | **Required/Optional** | **Details** |
+| ----------------- | --------------------- | ----------- |
+| `group_name_prefix` | Required | Prefix for Azure AD group names to be used for exclude groups. Group name will be `<prefix>-CA-Exclude-<policy sequence number>`. |
+| `emergency_access_upn` | Required | User principal name of your emergency access account which will be excluded from all policies. |
+| `supported_device_platforms` | Required | Specify a list of supported device platforms. Possible values are: `android`, `iOS`, `linux`, `macOS`, `windows`, `windowsPhone`. |
+| `trusted_locations` | Optional | List of IP address ranges in IPv4 CIDR format (e.g. 1.2.3.4/32) or any allowable IPv6 format from IETF RFC596 to be marked as trusted location(s). |
+| `reporting_only_for_all_policies` | Optional | Overrides each policies state and sets it to report only mode. |
+| `privileged_role_ids` | Optional | To define your own list of roles to include, specify the role IDs in this variable. Role IDs can be found in the [Microsoft docs - Azure AD built-in roles](https://docs.microsoft.com/en-us/azure/active-directory/roles/permissions-reference). Check out the list below to see the default roles. |
+
 # Policies
 The following policies can be created through this module:
 
@@ -60,7 +71,7 @@ The following changes are done compared to the recommended policies mentioned in
 | Policy | Description |
 | ------ | ----------- |
 | CAU002 | Excluded the `Directory Synchronization Accounts` role. |
-| CAU002 | Version 1.1 of the policy in the Excel sheet uses _Require authentication strength_. This is not supported in Terraform resource `azuread_conditional_access_policy` ([GitHub issue](https://github.com/hashicorp/terraform-provider-azuread/issues/944)). CAU009 created using regular "require MFA" like in version 1.0 of the policy. |
+| CAU002 | Version 1.1 of the policy in the Excel sheet uses _Require authentication strength_. This is not supported in Terraform resource `azuread_conditional_access_policy` ([GitHub issue](https://github.com/hashicorp/terraform-provider-azuread/issues/944)). CAU002 created using regular "require MFA" like in version 1.0 of the policy. |
 | CAU006 | Fixed name of the policy, so it follows the naming standard. |
 | CAU007 | Fixed name of the policy, so it follows the naming standard. |
 | CAU008 | Added more AAD roles to the list `included_roles`. See below for details about the default roles included. |
@@ -72,18 +83,7 @@ The following changes are done compared to the recommended policies mentioned in
 | CAD012 | Added more AAD roles to the list `included_roles`. See below for details about the default roles included. |
 | CAL004 | Added more AAD roles to the list `included_roles`. See below for details about the default roles included. |
 
-# Common configuration
-
-| **Configuration** | **Required/Optional** | **Details** |
-| ----------------- | --------------------- | ----------- |
-| `group_name_prefix` | Required | Prefix for Azure AD group names to be used for exclude groups. Group name will be `<prefix>-CA-Exclude-<policy sequence number>`. |
-| `emergency_access_upn` | Required | User principal name of your emergency access account which will be excluded from all policies. |
-| `supported_device_platforms` | Required | Specify a list of supported device platforms. Possible values are: `android`, `iOS`, `linux`, `macOS`, `windows`, `windowsPhone`. |
-| `trusted_locations` | Optional | List of IP address ranges in IPv4 CIDR format (e.g. 1.2.3.4/32) or any allowable IPv6 format from IETF RFC596 to be marked as trusted location(s). |
-| `reporting_only_for_all_policies` | Optional | Overrides each policies state and sets it to report only mode. |
-| `privileged_role_ids` | Optional | To define your own list of roles to include, specify the role IDs in this variable. Role IDs can be found in the [Microsoft docs - Azure AD built-in roles](https://docs.microsoft.com/en-us/azure/active-directory/roles/permissions-reference). Check out the list below to see the default roles. |
-
-## Default privileged roles
+# Default privileged roles
 The following privileged roles are set as default in the module:
 
 * User Administrator
@@ -155,7 +155,7 @@ provider "azuread" {}
 
 module "default_conditional_access_policies" {
   source  = "robertbrandso/recommended-conditional-access-policies/azuread"
-  version = "1.4.0"
+  version = "1.4.1"
 
   group_name_prefix          = "Access-Contoso"
   emergency_access_upn       = "emergency-access-caa@contoso.onmicrosoft.com"
@@ -174,10 +174,10 @@ provider "azuread" {}
 # ---------------
 # NAMED LOCATIONS
 # ---------------
-resource "azuread_named_location" "norway" {
-  display_name = "Norway"
+resource "azuread_named_location" "north_korea" {
+  display_name = "North Korea"
   country {
-    countries_and_regions = ["NO"]
+    countries_and_regions = ["KP"]
   }
 }
 
@@ -187,7 +187,7 @@ resource "azuread_named_location" "norway" {
 
 module "default_conditional_access_policies" {
   source  = "robertbrandso/recommended-conditional-access-policies/azuread"
-  version = "1.4.0"
+  version = "1.4.1"
 
   # Common configuration
   group_name_prefix               = "Access-Contoso"
@@ -200,16 +200,17 @@ module "default_conditional_access_policies" {
   ]
 
   # Custom settings for user policies
-  cau004_included_application_ids = ["eafb53d0-2c31-45ca-91ed-0a262e9e64ec"] # Contoso ERP app
-  cau005_included_application_ids = ["eafb53d0-2c31-45ca-91ed-0a262e9e64ec"] # Contoso ERP app
-  cau010_terms_of_use_ids         = ["4c4d2ee8-bcbd-469f-b850-1843912a16eb"] # Contoso Terms of use
+  cau004_included_application_ids  = ["eafb53d0-2c31-45ca-91ed-0a262e9e64ec"] # Contoso ERP app
+  cau005_included_application_ids  = ["eafb53d0-2c31-45ca-91ed-0a262e9e64ec"] # Contoso ERP app
+  cau010_terms_of_use_ids          = ["4c4d2ee8-bcbd-469f-b850-1843912a16eb"] # Contoso Terms of use
+  cau010_exclude_intune_enrollment = true
   
   # Custom settings for device policies
   cad005_enable_for_browser = true
 
   # Custom settings for location policies
-  cal001_blocked_location_ids = [azuread_named_location.norway.id]
-  cal004_included_user_upns   = [
+  cal001_blocked_location_ids = [azuread_named_location.north_korea.id]
+  cal003_included_user_upns   = [
     "serviceaccount-contoso-backup-m365@contoso.onmicrosoft.com",
     "serviceaccount-contoso-erp-app@contoso.onmicrosoft.com"
   ]

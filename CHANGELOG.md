@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.4.1 - 2023-01-03
+* Updated examples and created ./examples folder
+* Updated README.md
+
+
 ## v1.4.0 - 2023-01-02
 * CAU002: Changed name to ...v1.0 (from v1.1) to allign with Kenneths Excel sheet. No other changes.
 * CAU004: Added -or device.trustType -eq \"ServerAD\" (Hybrid Azure AD Joined). Bumped version.
